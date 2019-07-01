@@ -1,0 +1,31 @@
+#installing jupter notebook on an ec2 instance
+1.	ssh -i "test12.pem" ubuntu@ec2-54-164-116-24.compute-1.amazonaws.com
+2.	wget https://repo.anaconda.com/archive/Anaconda3-5.3.0-Linux-x86_64.sh
+3.	bash Anaconda3-5.3.0-Linux-x86_64.sh
+4.	source ~/.bashrc
+5.	which python
+6.	ipython
+a.	from IPython.lib import passwd
+b.	passwd()
+7.	jupyter notebook --generate-config
+8.	mkdir certs
+9.	cd certs
+10.	openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mycert.pem -out mycert.pem
+11.	cd ~/.jupyter/
+12.	vi jupyter_notebook_config.py
+c = get_config()
+
+# Kernel config
+c.IPKernelApp.pylab = 'inline'  # if you want plotting support always in your notebook
+
+# Notebook config
+c.NotebookApp.certfile = u'/home/ubuntu/certs/mycert.pem' #location of your certificate file
+c.NotebookApp.ip = '*'
+c.NotebookApp.open_browser = False  #so that the ipython notebook does not opens up a browser by default
+c.NotebookApp.password = u'sha1:98ff0e580111:12798c72623a6eecd54b51c006b1050f0ac1a62d'  #the encrypted password we generated above
+# It is a good idea to put it on a known, fixed port
+c.NotebookApp.port = 8888
+13.	cd ~
+14.	mkdir Notebooks
+15.	cd Notebooks
+16.	jupyter notebook
